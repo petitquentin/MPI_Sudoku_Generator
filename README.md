@@ -5,10 +5,10 @@ This program is a Sudoku generator in distributed computing. It is used to gener
 ## Examples
 
 ### Sudoku puzzle
-* ![](../doc/example_puzzle.png)
+* ![](doc/example/example_puzzle.png)
 
 ### PDF Output 
-* [Example output file](../doc/output_example.pdf)
+* [Example output file](doc/example/output_example.pdf)
 
 ## Prerequisites
 
