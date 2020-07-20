@@ -5,13 +5,13 @@
 #include <vector>
 #include <iostream>
 
-//Constructeur d'une grille de sudoku
+//Sudoku constructor
 Sudoku::Sudoku(){
     sudokuGrid = new Grid();
     completeGrid = new Grid();
 }
 
-//Destructor d'une grille de sudoku
+//Sudoku destructor
 Sudoku::~Sudoku(){
     delete sudokuGrid;
     delete completeGrid;
@@ -81,16 +81,17 @@ void Sudoku::generatePuzzle(){
     this->sudokuGrid->generatePuzzle();
 }
 
-
+//Return a sudoku grid pointer
 Grid * Sudoku::getSudokuGrid(){
     return sudokuGrid;
 }
 
+//Return a solution grid pointer
 Grid * Sudoku::getCompleteGrid(){
     return completeGrid;
 }
 
-
+//This function prints the sudoku grid
 void Sudoku::printSudoku(){
     std::cout << "+-----+-----+-----+" << std::endl;
     for(int k = 0; k < 3; k++){
@@ -115,6 +116,7 @@ void Sudoku::printSudoku(){
 
 }
 
+//This function prints the sudoku solution grid
 void Sudoku::printSolution(){
     std::cout << "+-----+-----+-----+" << std::endl;
     for(int k = 0; k < 3; k++){
@@ -136,4 +138,26 @@ void Sudoku::printSolution(){
         }
         std::cout << "+-----+-----+-----+" << std::endl;
     }
+}
+
+//This function saves the data in an int array for sending the sudoku information to an other processor with MPI.
+void Sudoku::exportMPI(int * data){
+    for(int  i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            data[i*9 + j] = (int)(this->sudokuGrid->getValueInGrid(i, j));
+            data[9*9 + i*9 + j] = (int)(this->completeGrid->getValueInGrid(i, j));
+        }
+    }
+    data[2*9*9] = this->getDifficulty();
+}
+
+//This function loads the data received by an MPI message into the sudoku object.
+void Sudoku::importMPI(int * data){
+    for(int  i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            this->sudokuGrid->setValueInGrid(i, j, (short int)data[i*9 + j]);
+            this->completeGrid->setValueInGrid(i, j, (short int)data[9*9 + i*9 + j]);
+        }
+    }
+    this->difficulty = data[2*9*9];
 }
