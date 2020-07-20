@@ -30,7 +30,20 @@ class Sudoku
         Grid * getCompleteGrid();
         void printSudoku();
         void printSolution();
+        void exportMPI(int * data);
+        void importMPI(int * data);
+        
+        // overload the operator<
+        bool operator<(const Sudoku& r) const
+        {
+            return difficulty < r.difficulty;
+        }
 
+        // overload the operator>
+        bool operator>(const Sudoku& r) const
+        {
+            return difficulty > r.difficulty;
+        }
     protected:
 
     private:

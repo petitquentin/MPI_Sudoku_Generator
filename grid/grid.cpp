@@ -11,7 +11,7 @@ Grid::Grid(){
     }
 
     //Sort randomly the array
-    srand(time(0));
+    //srand(time(0));
     std::random_shuffle(this->shuffleValue, (this->shuffleValue) + 9);
 
     //Set all value of the grid to EMPTYVALUE
@@ -166,7 +166,7 @@ void Grid::generatePuzzle(){
     for(int i = 0; i < 9*9; i++){
         shufflePosition[i] = i;
     }
-    srand(time(0));
+    //srand(time(0));
     std::random_shuffle(shufflePosition, (shufflePosition) + 9*9);
     
     for(int i = 0; i < 9*9; i++){
