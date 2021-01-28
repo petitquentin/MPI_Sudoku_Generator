@@ -33,16 +33,16 @@ void Sudoku::calculateDifficulty(){
     while(emptySize != 0){
         std::vector<std::vector<int>> empty;
         
-        for(int i = 0; i < 9; i++){
+        for(int i= 0; i < 9; i++){
             for(int j = 0; j < 9; j++){
-                if(tmpGrid.getValueInGrid(i,j) == EMPTYVALUE){
+                if(tmpGrid.getValueInGrid(i ,j) == EMPTYVALUE){
                     std::vector<int> temp;
                     temp.push_back(i * 9 +j);
                     
                     for(int k = 0; k < 9; k++){
-                        if(tmpGrid.canBeInsertHere(i, j, tmpGrid.getShuffleValue(k)))
+                        if(tmpGrid.canBeInsertHere(i, j, tmpGrid.getShuffleValue(i, k)))
                         {
-                        temp.push_back(tmpGrid.getShuffleValue(k));
+                        temp.push_back(tmpGrid.getShuffleValue(i, k));
                         }
                     }
 
