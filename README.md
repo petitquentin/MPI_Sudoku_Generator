@@ -19,6 +19,7 @@ To run the generator, you need to install the following items on your device :
 3. MPI implementation (like [MPICH](https://www.mpich.org/downloads/))
 4. `PdfLatex` 
     * The following package is recommended: `texlive-full`. This package will include all the LaTeX packages that will be used to generate the PDF document. 
+    * If `texlive-full` is so large install the packages `texlive-fonts-recommended` and `texlive-latex-recommended`.
 
 ## Installation
 
