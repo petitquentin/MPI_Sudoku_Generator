@@ -1,3 +1,21 @@
+/* #include <string>
+#include <string.h>
+#include <fstream>
+#include <iostream>
+#include <unistd.h>
+#include <iostream>
+#include <sys/time.h>
+#include <cmath>
+#include <vector>
+#include <memory>
+#include <cstdint>
+#include <sys/time.h>
+#include <chrono>
+#include <cstdlib>
+#include <stdlib.h>
+#include <list>
+#include <algorithm> */
+
 #include <grid/grid.hpp>
 #include <sudoku/sudoku.hpp>
 #include <latexGenerator/latexGenerator.hpp>
@@ -28,19 +46,14 @@ int main(int argc, char** argv){
     //get parameters
     int round = 100;
     std::string path = "output";
-    int levelExpected = 1;
     for(int i = 0; i < argc; i++){
         if(strcasecmp(argv[i], "-R") == 0){
             round = (atoi(argv[i+1]));
         }
-        if(strcasecmp(argv[i], "-L") == 0){
-            levelExpected = (atoi(argv[i+1]));
+        if(strcasecmp(argv[i], "-PATH") == 0 || strcasecmp(argv[i], "-P") == 0){
+            path = argv[i+1];
         }
     } 
-
-    std::cout << "PARAMS : " << std::endl;
-    std::cout << " Number of round : " << round << std::endl;
-    std::cout << " Expected Level  : " << levelExpected << std::endl;
      
     
     //Define variables for the timer
@@ -54,45 +67,42 @@ int main(int argc, char** argv){
     std::cout << "Generation begin at " << std::asctime(std::localtime(&result)) << std::endl;
 
     std::vector<Sudoku*> vector;
-    std::cout << std::endl;
 
 
     for(int i = 0; i < round; i ++){
         std::cout << i << std::endl;
         vector.push_back(new Sudoku());
         vector[i]->generatePuzzle();
-        if(vector[i]->changeLevel(levelExpected)){
-            std::cout << "Round " << i << " : Successful level change" << std::endl;
-        }
         vector[i]->calculateDifficulty();
     }
 
     std::sort(vector.begin(), vector.end(), compareSudoku);
     std::cout << "a" << std::endl;
 
-    int nbLevelDiff = 0;
-    int nbEmptySupp = 0;
 
-    for(int i = 0; i < vector.size(); i ++){
-        if(vector[i]->getLevel() != levelExpected){
-            nbLevelDiff ++;
-            if(vector[i]->getNumberEmptyElement() < vector[i]->associateLevel(levelExpected)){
-                nbEmptySupp++;
-            }
-            
-        }
-        std::cout << i << " : " << vector[i]->getLevel() << " " << vector[i]->getNumberEmptyElement() <<"/" <<  vector[i]->associateLevel(levelExpected) << std::endl;
+    LatexGenerator latexGen;
+    std::cout << "b" << std::endl;
+    latexGen.startDocument(vector.size());
+    std::cout << "c" << std::endl;
+    for(int i = 0; i < vector.size(); i++){
+        latexGen.addSudokuPuzzle(vector[i]);
     }
-
-    std::cout << "Sudoku without the same level : " << nbLevelDiff << std::endl;
-    std::cout << "Sudoku impossible to change level : " << nbEmptySupp << std:: endl;
+    std::cout << "d" << std::endl;
+    latexGen.generatePuzzleToSolution();
+    std::cout << "e" << std::endl;
+    for(int i = 0; i < vector.size(); i++){
+        latexGen.addSolution(vector[i]);
+    }
+    std::cout << "f" << std::endl;
+    latexGen.endDocument(); 
+    std::cout << "g" << std::endl;
 
     //stop the timer
     end = std::chrono::high_resolution_clock::now();
     //Calculate the difference between end and begin
     cpu_time_used = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
 
-    std::cout << "Sudokus generate in " << cpu_time_used/1000000000 << "seconds" << std::endl;
+    std::cout << "Sudoku generate in " << cpu_time_used/1000000000 << "seconds" << std::endl;
     std::cout << std::endl;
 
 

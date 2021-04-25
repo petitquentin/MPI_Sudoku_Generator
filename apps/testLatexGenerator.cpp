@@ -66,6 +66,11 @@ int main(int argc, char** argv){
     std::time_t result = std::time(nullptr);
     std::cout << "Generation begin at " << std::asctime(std::localtime(&result)) << std::endl;
 
+    std::cout << "PARAMS : " << std::endl;
+    std::cout << " Number of round : " << round << std::endl;
+    std::cout << " Path  : " << path << std::endl;
+    std::cout << std::endl;
+
     std::vector<Sudoku*> vector;
 
 

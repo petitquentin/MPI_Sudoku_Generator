@@ -68,4 +68,7 @@ class Sudoku
 
 
 };
+
+bool compareSudoku(Sudoku* a, Sudoku* b);
+
 #endif

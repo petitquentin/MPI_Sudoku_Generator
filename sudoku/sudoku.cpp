@@ -138,7 +138,6 @@ bool Sudoku::changeLevel(int levelExpected){
             }
         }
     }
-    std::cout << associateLevel(levelExpected) << std::endl;
     while(this->sudokuGrid->getNumberEmptyElement() > associateLevel(levelExpected)){
         int r = rand() % rowE.size();
         this->sudokuGrid->setValueInGrid(rowE[r], colE[r], (this->completeGrid)->getValueInGrid(rowE[r], colE[r]));
