@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package sudoku;
+
+message Sudoku {
+    required int32 nbEmpty=1;
+    repeated int32 values=2;
+    required int32 score=3;
+    required int32 level=4;
+}

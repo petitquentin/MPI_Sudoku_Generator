@@ -33,7 +33,7 @@ class Grid
         void initializeValideGrid();
         void copyGrid(Grid * otherGrid);
         void generatePuzzle();
-        short int getShuffleValue(int ind);
+        short int getShuffleValue(int i, int ind);
         int getNumberEmptyElement();
         bool canBeInsertHere(int row, int col, short int number);
 
@@ -45,7 +45,7 @@ class Grid
 
     private:
         short int grid[9][9];
-        short int shuffleValue[9];
+        short int shuffleValue[9][9];
 
 
 };

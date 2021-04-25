@@ -202,6 +202,8 @@ int Grid::getNumberEmptyElement(){
     return numberEmptyElement;
 }
 
+//int Grid::getSpecificEmptyValue(){}
+
 //This function returns the ind'th value of the shuffleValue array
 short int Grid::getShuffleValue(int i,int ind){
     return shuffleValue[i][ind];

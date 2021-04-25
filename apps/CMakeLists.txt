@@ -34,3 +34,10 @@ target_compile_features(testLatexGenerator PRIVATE cxx_std_17)
 target_link_libraries(testLatexGenerator PRIVATE latexGenerator_library sudoku_library grid_library stdc++fs)
 target_include_directories(testLatexGenerator PUBLIC ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS testLatexGenerator DESTINATION bin)
+
+add_executable(testChangeLevel testChangeLevel.cpp)
+target_compile_features(testChangeLevel PRIVATE cxx_std_17)
+
+target_link_libraries(testChangeLevel PRIVATE latexGenerator_library sudoku_library grid_library stdc++fs)
+target_include_directories(testChangeLevel PUBLIC ${PROJECT_SOURCE_DIR}/include)
+install(TARGETS testChangeLevel DESTINATION bin)

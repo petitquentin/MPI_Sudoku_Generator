@@ -18,6 +18,13 @@
 
 #include <grid/grid.hpp>
 
+#define VERYEASY 41
+#define EASY 46
+#define MEDIUM 51
+#define HARD 56
+#define EXTREME 58
+
+
 class Sudoku
 {
     public:
@@ -32,6 +39,13 @@ class Sudoku
         void printSolution();
         void exportMPI(int * data);
         void importMPI(int * data);
+
+        int associateLevel(int level);
+        int associateNbEmpty(int nbEmpty);
+        bool changeLevel(int levelExpected);
+        int getLevel();
+        int maxLevelPossible();
+        int getNumberEmptyElement();
         
         // overload the operator<
         bool operator<(const Sudoku& r) const

@@ -73,6 +73,86 @@ int Sudoku::getDifficulty(){
     return this->difficulty;
 }
 
+//Function which return the number of empty cell for a specific level
+int Sudoku::associateLevel(int level){
+    switch (level) {
+        case 1: return VERYEASY; //VERY EASY have 40 numbers 
+                break;
+        case 2: return EASY; //EASY fave 35 numbers
+                break;
+        case 3: return MEDIUM; //MEDIUM have 30 numbers
+                break;
+        case 4: return HARD; //HARD have 25 numbers
+                break;
+        case 5: return EXTREME; //EXTREME have 23 numbers
+                break;
+        default:
+            return -1;
+    }
+}
+
+//Function which return the level cell for a specific number of empty value
+int Sudoku::associateNbEmpty(int nbEmpty){
+    switch (nbEmpty) {
+        case VERYEASY: return 1; //VERY EASY have 40 numbers 
+        case EASY: return 2; //EASY fave 35 numbers
+        case MEDIUM: return 3; //MEDIUM have 30 numbers
+        case HARD: return 4; //HARD have 25 numbers
+        case EXTREME: return 5; //EXTREME have 23 numbers
+        default:
+            return -1;
+    }
+}
+
+int Sudoku::getLevel(){
+    int nbEmpty = this->sudokuGrid->getNumberEmptyElement();
+    return associateNbEmpty(nbEmpty);
+}
+
+int Sudoku::maxLevelPossible(){
+    int nbEmpty = this->sudokuGrid->getNumberEmptyElement();
+    int l = -1;
+    int i = 1;
+    while(i < 6){
+        if(this->associateLevel(i) <= nbEmpty){
+            l = i;
+            i++;
+        }else{
+            break;
+        }
+    }
+    return l;
+}
+
+bool Sudoku::changeLevel(int levelExpected){
+    if(maxLevelPossible() < levelExpected){
+        return false;
+    }
+    std::vector<int> rowE;
+    std::vector<int> colE;
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j ++){
+            if(this->sudokuGrid->getValueInGrid(i, j) == EMPTYVALUE){
+                rowE.push_back(i);
+                colE.push_back(j);
+            }
+        }
+    }
+    std::cout << associateLevel(levelExpected) << std::endl;
+    while(this->sudokuGrid->getNumberEmptyElement() > associateLevel(levelExpected)){
+        int r = rand() % rowE.size();
+        this->sudokuGrid->setValueInGrid(rowE[r], colE[r], (this->completeGrid)->getValueInGrid(rowE[r], colE[r]));
+    }
+    if(this->getLevel() == levelExpected){
+        return true;
+    }
+    return false;
+}
+
+int Sudoku::getNumberEmptyElement(){
+    return this->sudokuGrid->getNumberEmptyElement();
+}
+
 //This function is used to generate the Sudoku
 void Sudoku::generatePuzzle(){
     //this->sudokuGrid->resetGrid();
