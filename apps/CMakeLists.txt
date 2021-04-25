@@ -41,3 +41,10 @@ target_compile_features(testChangeLevel PRIVATE cxx_std_17)
 target_link_libraries(testChangeLevel PRIVATE latexGenerator_library sudoku_library grid_library stdc++fs)
 target_include_directories(testChangeLevel PUBLIC ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS testChangeLevel DESTINATION bin)
+
+add_executable(testGenerateProtobuf testGenerateProtobuf.cpp)
+target_compile_features(testGenerateProtobuf PRIVATE cxx_std_17)
+
+target_link_libraries(testGenerateProtobuf PRIVATE sudokupb_library latexGenerator_library sudoku_library grid_library stdc++fs)
+target_include_directories(testGenerateProtobuf PUBLIC ${PROJECT_SOURCE_DIR}/include)
+install(TARGETS testGenerateProtobuf DESTINATION bin)

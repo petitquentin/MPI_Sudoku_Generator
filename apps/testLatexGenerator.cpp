@@ -46,6 +46,12 @@ int main(int argc, char** argv){
     //get parameters
     int round = 100;
     std::string path = "output";
+    std::vectoor<bool> vectorLevel;
+    std::vectoor<int> vectorNbLevel;
+    for(int i = 0; i < 6; i++){
+        vectorLevel.push_back(false);
+        vectorNbLevel.push_back(0);
+    }
     for(int i = 0; i < argc; i++){
         if(strcasecmp(argv[i], "-R") == 0){
             round = (atoi(argv[i+1]));

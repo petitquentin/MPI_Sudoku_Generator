@@ -15,6 +15,7 @@
 #include <cstdint>
 #include <sys/time.h>
 #include <chrono>
+#include<sstream>
 
 #include <grid/grid.hpp>
 
@@ -46,6 +47,7 @@ class Sudoku
         int getLevel();
         int maxLevelPossible();
         int getNumberEmptyElement();
+        std::string getStringSudoku();
         
         // overload the operator<
         bool operator<(const Sudoku& r) const

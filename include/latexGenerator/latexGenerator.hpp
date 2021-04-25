@@ -24,6 +24,7 @@ class LatexGenerator
     public:
         LatexGenerator(void);
         LatexGenerator(std::string p);
+        LatexGenerator(std::string p, std::vector<bool> levels);
         ~LatexGenerator(void);
         void startDocument(int nbPuzzle);
         void addSudokuPuzzle(Sudoku * s);
@@ -33,6 +34,8 @@ class LatexGenerator
         int getNbPuzzleAdded();
         int getNbSolutionAdded();
         int getNbPuzzleExpected();
+        std::string getStringLevel(Sudoku * s);
+        std::string getStringLevel(int i);
 
 
         
@@ -43,6 +46,7 @@ class LatexGenerator
         
 
     private:
+        std::vector<bool> levelInTheDocuments
         std::ofstream ofs;
         std::string path;
         bool isStarted;
@@ -52,6 +56,7 @@ class LatexGenerator
         int nbPuzzleAdded;
         int nbSolutionAdded;
         int nbColumnBreak;
+        bool withLevel;
 
 
 };

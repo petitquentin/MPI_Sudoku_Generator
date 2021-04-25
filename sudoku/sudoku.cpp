@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <iostream>
+#include<sstream>
 
 //Sudoku constructor
 Sudoku::Sudoku(){
@@ -239,4 +240,17 @@ void Sudoku::importMPI(int * data){
         }
     }
     this->difficulty = data[2*9*9];
+}
+
+std::string Sudoku::getStringSudoku(){
+    std::string s = "";
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+
+            std::stringstream ss;
+            ss << this->sudokuGrid->getValueInGrid(i, j);
+            s = s + ss.str();
+        }
+    }
+    return s;
 }

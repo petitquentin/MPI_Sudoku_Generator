@@ -7,11 +7,19 @@ if(MPI_FOUND)
     message([NOTICE] "MPI was found")
 endif(MPI_FOUND)
 
+INCLUDE(FindProtobuf)
+find_package(Protobuf)
+if(Protobuf_FOUND)
+    include_directories(${Protobuf_INCLUDE_PATH})
+    message([NOTICE] "Protobuf was found")
+endif(MPI_FOUND)
+
 # Set MPICXX as the CXX compiler
 
 SET(CMAKE_CXX_COMPILER mpicxx)
 
 add_subdirectory(grid)
+add_subdirectory(proto)
 add_subdirectory(sudoku)
 add_subdirectory(latexGenerator)
 add_subdirectory(apps)
