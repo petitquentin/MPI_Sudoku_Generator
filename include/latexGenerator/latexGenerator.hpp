@@ -46,7 +46,7 @@ class LatexGenerator
         
 
     private:
-        std::vector<bool> levelInTheDocuments
+        std::vector<bool> levelInTheDocuments;
         std::ofstream ofs;
         std::string path;
         bool isStarted;

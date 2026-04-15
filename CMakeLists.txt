@@ -12,7 +12,7 @@ find_package(Protobuf)
 if(Protobuf_FOUND)
     include_directories(${Protobuf_INCLUDE_PATH})
     message([NOTICE] "Protobuf was found")
-endif(MPI_FOUND)
+endif(Protobuf_FOUND)
 
 # Set MPICXX as the CXX compiler
 

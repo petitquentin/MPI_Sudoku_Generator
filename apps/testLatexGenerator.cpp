@@ -46,8 +46,8 @@ int main(int argc, char** argv){
     //get parameters
     int round = 100;
     std::string path = "output";
-    std::vectoor<bool> vectorLevel;
-    std::vectoor<int> vectorNbLevel;
+    std::vector<bool> vectorLevel;
+    std::vector<int> vectorNbLevel;
     for(int i = 0; i < 6; i++){
         vectorLevel.push_back(false);
         vectorNbLevel.push_back(0);

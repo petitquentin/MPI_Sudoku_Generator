@@ -10,7 +10,7 @@ LatexGenerator::LatexGenerator(){
     this->isStarted = false;
     this->isEnded = false;
     this->isAtSolution = false;
-    this->withLatex = false;
+    this->withLevel = false;
     ofs.open(this->path, std::ofstream::out | std::ofstream::trunc);
 }
 
@@ -127,7 +127,7 @@ void LatexGenerator::startDocument(int nbPuzzle){
 
     }
     if(this->withLevel){
-        nb_level = 0;
+        int nb_level = 0;
         for(int i = 0; i < 6; i++){
             if(this->levelInTheDocuments[i]){
                 nb_level ++;
@@ -163,7 +163,7 @@ void LatexGenerator::startDocument(int nbPuzzle){
                         }
                     }
 
-                    ofs << " }}" << std::endl
+                    ofs << " }}" << std::endl;
                 }
             }
             
@@ -199,7 +199,7 @@ void LatexGenerator::addSudokuPuzzle(Sudoku * s){
         ofs << "\\huge" << std::endl;
         ofs << "\\vspace{25mm}" << std::endl;
         if(this->withLevel){
-            ofs << "\\section*{\\textsf{\\Huge Sudoku \\#" << this->nbPuzzleAdded<< " \\normalsize "<< this->getStr(s->getLevel()) <<" grid \\ \\small (soluce page \\pageref{soluce::" << nbPuzzleAdded << "})}}" << std::endl;
+            ofs << "\\section*{\\textsf{\\Huge Sudoku \\#" << this->nbPuzzleAdded<< " \\normalsize "<< this->getStringLevel(s->getLevel()) <<" grid \\ \\small (soluce page \\pageref{soluce::" << nbPuzzleAdded << "})}}";
         }else{
             ofs << "\\section*{\\textsf{\\Huge Sudoku \\#" << this->nbPuzzleAdded<< " \\normalsize Difficulty "<< s->getDifficulty() <<" \\ \\small (soluce page \\pageref{soluce::" << nbPuzzleAdded << "})}}" << std::endl;
         }
