@@ -23,18 +23,31 @@
 class Grid
 {
     public:
+        // Create a grid with randomized candidate order and all cells set to EMPTYVALUE.
         Grid(void);
         ~Grid(void);
+
+        // Basic cell accessors.
         void setValueInGrid(int row, int col, short int value);
         short int getValueInGrid(int row, int col);
+
+        // Backtracking helpers and solver.
         bool isComplete(int * row, int * col);
         bool solveGrid();
+
+        // Reset/fill/copy utilities.
         void resetGrid();
         void initializeValideGrid();
         void copyGrid(Grid * otherGrid);
+
+        // Remove clues while preserving one unique solution.
         void generatePuzzle();
+
+        // Access shuffled candidate values and board statistics.
         short int getShuffleValue(int i, int ind);
         int getNumberEmptyElement();
+
+        // Return true when a number can be inserted at (row, col).
         bool canBeInsertHere(int row, int col, short int number);
 
     protected:

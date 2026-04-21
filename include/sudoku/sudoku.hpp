@@ -29,24 +29,46 @@
 class Sudoku
 {
     public:
+        // Build an empty Sudoku object containing one puzzle grid and one solution grid.
         Sudoku();
         ~Sudoku();
+
+        // Compute a difficulty score for the current puzzle using candidate analysis.
         void calculateDifficulty();
+
+        // Return the last computed difficulty score.
         int getDifficulty();
+
+        // Generate a new puzzle and its corresponding complete solution.
         void generatePuzzle();
+
+        // Access the playable puzzle grid (contains EMPTYVALUE for hidden cells).
         Grid * getSudokuGrid();
+
+        // Access the full solved grid.
         Grid * getCompleteGrid();
+
+        // Print puzzle and solution to stdout in a human-readable board format.
         void printSudoku();
         void printSolution();
+
+        // Pack/unpack one Sudoku in a fixed int buffer for MPI communication.
         void exportMPI(int * data);
         void importMPI(int * data);
 
+        // Convert between level index and expected number of empty cells.
         int associateLevel(int level);
         int associateNbEmpty(int nbEmpty);
+
+        // Try to adjust the current puzzle to a target level.
         bool changeLevel(int levelExpected);
+
+        // Return computed level, max reachable level and current empty count.
         int getLevel();
         int maxLevelPossible();
         int getNumberEmptyElement();
+
+        // Return puzzle cells as an 81-character numeric string.
         std::string getStringSudoku();
         
         // overload the operator<

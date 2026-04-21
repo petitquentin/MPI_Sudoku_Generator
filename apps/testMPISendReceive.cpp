@@ -53,6 +53,7 @@ int main(int argc, char** argv){
     } */
     if(p < 2){
         std::cout << "You need to use more than 1 nodes to execute this test" << std::endl;
+        MPI_Finalize();
         return 0;
     }
     
@@ -68,6 +69,8 @@ int main(int argc, char** argv){
 
     Sudoku sudoku;
     Sudoku sudoku2;
+
+    // Rank 1 is the producer: generate two puzzles and send them in one MPI message.
     if(my_rank == 1){
         sudoku.generatePuzzle();
         sudoku2.generatePuzzle();
@@ -75,12 +78,15 @@ int main(int argc, char** argv){
         sudoku2.calculateDifficulty();
         std::cout << "Rank " << my_rank << " : Difficulty = " << sudoku.getDifficulty() << " and " << sudoku2.getDifficulty() << std::endl;
         int * bufferSend;
+        // One Sudoku payload uses 163 ints: 81 puzzle cells, 81 solution cells, 1 difficulty.
         bufferSend = (int *)malloc(sizeof(int) * 2 * ((2 * 9 * 9) + 1));
         sudoku.exportMPI(bufferSend);
         sudoku2.exportMPI(&(bufferSend[163]));
         MPI_Send(bufferSend, 2 * ((2 * 9 * 9) + 1), MPI_INT, 0, 0, MPI_COMM_WORLD);
         free(bufferSend);
     }
+
+    // Rank 0 is the consumer: receive both payloads and reconstruct Sudoku objects.
     if(my_rank == 0){
         int * bufferRecv;
         bufferRecv = (int *)malloc(sizeof(int) * 2 * ((2 * 9 * 9) + 1));
@@ -88,6 +94,7 @@ int main(int argc, char** argv){
         sudoku.importMPI(bufferRecv);
         sudoku2.importMPI(&(bufferRecv[163]));
         std::cout << "Rank " << my_rank << " : Difficulty = " << sudoku.getDifficulty() << " and " << sudoku2.getDifficulty() << std::endl;
+        free(bufferRecv);
     }
 
     
@@ -102,6 +109,7 @@ int main(int argc, char** argv){
     std::cout << "Sudoku generate in " << cpu_time_used/1000000000 << "seconds" << std::endl;
     std::cout << std::endl;
 
+    MPI_Finalize();
 
     return 0;
 }
