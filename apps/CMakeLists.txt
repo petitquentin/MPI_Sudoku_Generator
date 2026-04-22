@@ -35,16 +35,30 @@ target_link_libraries(testLatexGenerator PRIVATE latexGenerator_library sudoku_l
 target_include_directories(testLatexGenerator PUBLIC ${PROJECT_SOURCE_DIR}/include)
 install(TARGETS testLatexGenerator DESTINATION bin)
 
-add_executable(testChangeLevel testChangeLevel.cpp)
-target_compile_features(testChangeLevel PRIVATE cxx_std_17)
+add_executable(testEvaluateGrid testEvaluateGrid.cpp)
+target_compile_features(testEvaluateGrid PRIVATE cxx_std_17)
 
-target_link_libraries(testChangeLevel PRIVATE latexGenerator_library sudoku_library grid_library stdc++fs)
-target_include_directories(testChangeLevel PUBLIC ${PROJECT_SOURCE_DIR}/include)
-install(TARGETS testChangeLevel DESTINATION bin)
+target_link_libraries(testEvaluateGrid PRIVATE latexGenerator_library sudoku_library grid_library stdc++fs)
+target_include_directories(testEvaluateGrid PUBLIC ${PROJECT_SOURCE_DIR}/include)
+install(TARGETS testEvaluateGrid DESTINATION bin)
 
-add_executable(testGenerateProtobuf testGenerateProtobuf.cpp)
-target_compile_features(testGenerateProtobuf PRIVATE cxx_std_17)
+#add_executable(testMPILatexGenerator testMPILatexGenerator.cpp)
+#target_compile_features(testMPILatexGenerator PRIVATE cxx_std_17)
 
-target_link_libraries(testGenerateProtobuf PRIVATE sudokupb_library latexGenerator_library sudoku_library grid_library stdc++fs)
-target_include_directories(testGenerateProtobuf PUBLIC ${PROJECT_SOURCE_DIR}/include)
-install(TARGETS testGenerateProtobuf DESTINATION bin)
+#target_link_libraries(testMPILatexGenerator PRIVATE latexGenerator_library sudoku_library grid_library stdc++fs)
+#target_include_directories(testMPILatexGenerator PUBLIC ${PROJECT_SOURCE_DIR}/include)
+#install(TARGETS testMPILatexGenerator DESTINATION bin)
+
+add_executable(testLevel testLevel.cpp)
+target_compile_features(testLevel PRIVATE cxx_std_17)
+
+target_link_libraries(testLevel PRIVATE latexGenerator_library sudoku_library grid_library stdc++fs)
+target_include_directories(testLevel PUBLIC ${PROJECT_SOURCE_DIR}/include)
+install(TARGETS testLevel DESTINATION bin)
+
+add_executable(testLevelInGeneration testLevelInGeneration.cpp)
+target_compile_features(testLevelInGeneration PRIVATE cxx_std_17)
+
+target_link_libraries(testLevelInGeneration PRIVATE latexGenerator_library sudoku_library grid_library stdc++fs)
+target_include_directories(testLevelInGeneration PUBLIC ${PROJECT_SOURCE_DIR}/include)
+install(TARGETS testLevelInGeneration DESTINATION bin)
