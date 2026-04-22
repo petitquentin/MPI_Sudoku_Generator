@@ -7,16 +7,12 @@
 Grid::Grid(){
     //Fill in the array of value
     for(int i = 0; i < 9; i++){
-        for(int j = 0; j < 9; j++){
-            this->shuffleValue[j][i] = i+1;
-        }
+        this->shuffleValue[i] = i+1;
     }
 
     //Sort randomly the array
     //srand(time(0));
-    for(int j = 0; j < 9; j++){
-        std::random_shuffle(this->shuffleValue[j], (this->shuffleValue[j]) + 9);
-    }
+    std::random_shuffle(this->shuffleValue, this->shuffleValue + 9);
     //Set all value of the grid to EMPTYVALUE
     this->resetGrid();
 }
@@ -102,9 +98,9 @@ bool Grid::solveGrid()
 
     for (int num = 0; num < 9; num++)
     {
-        if (this->canBeInsertHere(row, col, this->shuffleValue[row][num]))
+        if (this->canBeInsertHere(row, col, this->shuffleValue[num]))
         {
-            this->grid[row][col] = this->shuffleValue[row][num];
+            this->grid[row][col] = this->shuffleValue[num];
 
             if (solveGrid())
                 return true;
@@ -149,8 +145,8 @@ void Grid::isUniqueSolution(int * number){
         (*number)++;
     }else{
         for(int i = 0; i < 9; i++){
-            if(canBeInsertHere(row, col, this->shuffleValue[row][i])){
-                this->grid[row][col] = this->shuffleValue[row][i];
+            if(canBeInsertHere(row, col, this->shuffleValue[i])){
+                this->grid[row][col] = this->shuffleValue[i];
                 this->isUniqueSolution(number);
             }
             this->grid[row][col] = EMPTYVALUE;
@@ -205,6 +201,6 @@ int Grid::getNumberEmptyElement(){
 //int Grid::getSpecificEmptyValue(){}
 
 //This function returns the ind'th value of the shuffleValue array
-short int Grid::getShuffleValue(int i,int ind){
-    return shuffleValue[i][ind];
+short int Grid::getShuffleValue(int ind){
+    return shuffleValue[ind];
 }
