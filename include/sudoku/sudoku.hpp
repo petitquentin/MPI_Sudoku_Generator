@@ -15,70 +15,40 @@
 #include <cstdint>
 #include <sys/time.h>
 #include <chrono>
-#include<sstream>
+#include <string>
+#include <map>
 
 #include <grid/grid.hpp>
-
-#define VERYEASY 41
-#define EASY 46
-#define MEDIUM 51
-#define HARD 56
-#define EXTREME 58
-
 
 class Sudoku
 {
     public:
-        // Build an empty Sudoku object containing one puzzle grid and one solution grid.
-        Sudoku();
-        ~Sudoku();
-
-        // Compute a difficulty score for the current puzzle using candidate analysis.
-        void calculateDifficulty();
-
-        // Return the last computed difficulty score.
-        int getDifficulty();
-
-        // Generate a new puzzle and its corresponding complete solution.
-        void generatePuzzle();
-
-        // Access the playable puzzle grid (contains EMPTYVALUE for hidden cells).
-        Grid * getSudokuGrid();
-
-        // Access the full solved grid.
-        Grid * getCompleteGrid();
-
-        // Print puzzle and solution to stdout in a human-readable board format.
-        void printSudoku();
-        void printSolution();
-
-        // Pack/unpack one Sudoku in a fixed int buffer for MPI communication.
-        void exportMPI(int * data);
-        void importMPI(int * data);
-
-        // Convert between level index and expected number of empty cells.
-        int associateLevel(int level);
-        int associateNbEmpty(int nbEmpty);
-
-        // Try to adjust the current puzzle to a target level.
-        bool changeLevel(int levelExpected);
-
-        // Return computed level, max reachable level and current empty count.
-        int getLevel();
-        int maxLevelPossible();
-        int getNumberEmptyElement();
-
-        // Return puzzle cells as an 81-character numeric string.
-        std::string getStringSudoku();
+        Sudoku(); // Build an empty Sudoku object.
+        Sudoku(std::string str); // Build a Sudoku from serialized input.
+        ~Sudoku(); // Release owned grid resources.
+        void calculateDifficulty(); // Compute puzzle difficulty score.
+        int getDifficulty(); // Return current difficulty score.
+        void generatePuzzle(); // Generate a new puzzle and its solution.
+        void addNewValueInGrid(); // Add one value to help adjust puzzle state.
+        Grid * getSudokuGrid(); // Access the playable puzzle grid.
+        Grid * getCompleteGrid(); // Access the solved reference grid.
+        void printSudoku(); // Print the puzzle grid to standard output.
+        void printSolution(); // Print the solution grid to standard output.
+        void exportMPI(int * data); // Serialize Sudoku data for MPI transfer.
+        void importMPI(int * data); // Load Sudoku data received through MPI.
+        void calculateLevel(); // Compute discrete level from difficulty.
+        std::string getLevelString(); // Return level as human-readable string.
+        int getLevel(); // Return numeric level.
+        bool changeSudokuLevel(int expectedLevel); // Regenerate/adjust puzzle to target level.
         
         // overload the operator<
-        bool operator<(const Sudoku& r) const
+        bool operator<(const Sudoku& r) const // Compare by difficulty (ascending).
         {
             return difficulty < r.difficulty;
         }
 
         // overload the operator>
-        bool operator>(const Sudoku& r) const
+        bool operator>(const Sudoku& r) const // Compare by difficulty (descending).
         {
             return difficulty > r.difficulty;
         }
@@ -89,10 +59,10 @@ class Sudoku
         Grid * completeGrid;
         int level;
         int difficulty;
+        std::map<int, std::string> mapLevel;
+        void FillInTheMap(); // Initialize the level-to-label lookup map.
+
 
 
 };
-
-bool compareSudoku(Sudoku* a, Sudoku* b);
-
 #endif

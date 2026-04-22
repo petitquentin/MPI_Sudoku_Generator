@@ -22,31 +22,27 @@
 class LatexGenerator
 {
     public:
-        LatexGenerator(void);
-        LatexGenerator(std::string p);
-        LatexGenerator(std::string p, std::vector<bool> levels);
-        ~LatexGenerator(void);
-        void startDocument(int nbPuzzle);
-        void addSudokuPuzzle(Sudoku * s);
-        void generatePuzzleToSolution();
-        void addSolution(Sudoku * s);
-        void endDocument();
-        int getNbPuzzleAdded();
-        int getNbSolutionAdded();
-        int getNbPuzzleExpected();
-        std::string getStringLevel(Sudoku * s);
-        std::string getStringLevel(int i);
+        LatexGenerator(void); // Build a generator with default output path.
+        LatexGenerator(std::string p); // Build a generator with a custom output path.
+        ~LatexGenerator(void); // Close resources used by the generator.
+        void startDocument(int nbPuzzle); // Write LaTeX header and start puzzle section.
+        void addSudokuPuzzle(Sudoku * s); // Append one Sudoku puzzle to the document.
+        void generatePuzzleToSolution(); // Switch document from puzzle pages to solution pages.
+        void addSolution(Sudoku * s); // Append one Sudoku solution to the document.
+        void endDocument(); // Finalize and close the LaTeX document.
+        int getNbPuzzleAdded(); // Return how many puzzles were written.
+        int getNbSolutionAdded(); // Return how many solutions were written.
+        int getNbPuzzleExpected(); // Return how many puzzles are expected in total.
 
 
         
     protected:
-        bool getIsStarted();
-        bool getIsEnded();
-        bool getIsAtSolution();
+        bool getIsStarted(); // Tell whether document generation has started.
+        bool getIsEnded(); // Tell whether document generation is finished.
+        bool getIsAtSolution(); // Tell whether writer is currently in solution section.
         
 
     private:
-        std::vector<bool> levelInTheDocuments;
         std::ofstream ofs;
         std::string path;
         bool isStarted;
@@ -56,7 +52,6 @@ class LatexGenerator
         int nbPuzzleAdded;
         int nbSolutionAdded;
         int nbColumnBreak;
-        bool withLevel;
 
 
 };
