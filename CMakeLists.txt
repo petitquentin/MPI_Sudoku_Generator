@@ -19,7 +19,7 @@ endif(Protobuf_FOUND)
 SET(CMAKE_CXX_COMPILER mpicxx)
 
 add_subdirectory(grid)
-add_subdirectory(proto)
+# add_subdirectory(proto)
 add_subdirectory(sudoku)
 add_subdirectory(latexGenerator)
 add_subdirectory(apps)
