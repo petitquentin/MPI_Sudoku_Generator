@@ -4,12 +4,39 @@
 
 #include <vector>
 #include <iostream>
-#include<sstream>
+#include <string>
 
 //Sudoku constructor
 Sudoku::Sudoku(){
     sudokuGrid = new Grid();
     completeGrid = new Grid();
+    this->FillInTheMap();
+}
+
+//Sudoku constructor with the 
+Sudoku::Sudoku(std::string str){
+    sudokuGrid = new Grid();
+    completeGrid = new Grid();
+    
+    if(str.length() == 81){ 
+        for(int i = 0; i < 81; i++){
+            if(str.at(i) - '0' >= 1 && str.at(i) - '0' <= 9){
+                this->sudokuGrid->setValueInGrid(i/9, i%9, (short int)(str.at(i) - '0'));
+                this->completeGrid->setValueInGrid(i/9, i%9, (short int)(str.at(i) - '0'));
+            }else{
+                this->sudokuGrid->setValueInGrid(i/9, i%9, EMPTYVALUE);
+                this->completeGrid->setValueInGrid(i/9, i%9, EMPTYVALUE);
+            }
+        }
+        this->completeGrid->solveGrid();
+    }else{
+        std::cout << "The string doesn't look valid" <<std::endl;
+        for(int i = 0; i < 81; i++){
+            this->sudokuGrid->setValueInGrid(i/9, i%9, EMPTYVALUE);
+            this->completeGrid->setValueInGrid(i/9, i%9, EMPTYVALUE);
+        }
+    }
+    this->FillInTheMap();
 }
 
 //Sudoku destructor
@@ -34,16 +61,16 @@ void Sudoku::calculateDifficulty(){
     while(emptySize != 0){
         std::vector<std::vector<int>> empty;
         
-        for(int i= 0; i < 9; i++){
+        for(int i = 0; i < 9; i++){
             for(int j = 0; j < 9; j++){
-                if(tmpGrid.getValueInGrid(i ,j) == EMPTYVALUE){
+                if(tmpGrid.getValueInGrid(i,j) == EMPTYVALUE){
                     std::vector<int> temp;
                     temp.push_back(i * 9 +j);
                     
                     for(int k = 0; k < 9; k++){
-                        if(tmpGrid.canBeInsertHere(i, j, tmpGrid.getShuffleValue(i, k)))
+                        if(tmpGrid.canBeInsertHere(i, j, tmpGrid.getShuffleValue(k)))
                         {
-                        temp.push_back(tmpGrid.getShuffleValue(i, k));
+                            temp.push_back(tmpGrid.getShuffleValue(k));
                         }
                     }
 
@@ -67,90 +94,12 @@ void Sudoku::calculateDifficulty(){
     }
     difficulty *= 100;
     difficulty += this->sudokuGrid->getNumberEmptyElement();
+    this->calculateLevel();
 }
 
 //Function that returns the value of the variable difficulty
 int Sudoku::getDifficulty(){
     return this->difficulty;
-}
-
-//Function which return the number of empty cell for a specific level
-int Sudoku::associateLevel(int level){
-    switch (level) {
-        case 1: return VERYEASY; //VERY EASY have 40 numbers 
-                break;
-        case 2: return EASY; //EASY fave 35 numbers
-                break;
-        case 3: return MEDIUM; //MEDIUM have 30 numbers
-                break;
-        case 4: return HARD; //HARD have 25 numbers
-                break;
-        case 5: return EXTREME; //EXTREME have 23 numbers
-                break;
-        default:
-            return -1;
-    }
-}
-
-//Function which return the level cell for a specific number of empty value
-int Sudoku::associateNbEmpty(int nbEmpty){
-    switch (nbEmpty) {
-        case VERYEASY: return 1; //VERY EASY have 40 numbers 
-        case EASY: return 2; //EASY fave 35 numbers
-        case MEDIUM: return 3; //MEDIUM have 30 numbers
-        case HARD: return 4; //HARD have 25 numbers
-        case EXTREME: return 5; //EXTREME have 23 numbers
-        default:
-            return -1;
-    }
-}
-
-int Sudoku::getLevel(){
-    int nbEmpty = this->sudokuGrid->getNumberEmptyElement();
-    return associateNbEmpty(nbEmpty);
-}
-
-int Sudoku::maxLevelPossible(){
-    int nbEmpty = this->sudokuGrid->getNumberEmptyElement();
-    int l = -1;
-    int i = 1;
-    while(i < 6){
-        if(this->associateLevel(i) <= nbEmpty){
-            l = i;
-            i++;
-        }else{
-            break;
-        }
-    }
-    return l;
-}
-
-bool Sudoku::changeLevel(int levelExpected){
-    if(maxLevelPossible() < levelExpected){
-        return false;
-    }
-    std::vector<int> rowE;
-    std::vector<int> colE;
-    for(int i = 0; i < 9; i++){
-        for(int j = 0; j < 9; j ++){
-            if(this->sudokuGrid->getValueInGrid(i, j) == EMPTYVALUE){
-                rowE.push_back(i);
-                colE.push_back(j);
-            }
-        }
-    }
-    while(this->sudokuGrid->getNumberEmptyElement() > associateLevel(levelExpected)){
-        int r = rand() % rowE.size();
-        this->sudokuGrid->setValueInGrid(rowE[r], colE[r], (this->completeGrid)->getValueInGrid(rowE[r], colE[r]));
-    }
-    if(this->getLevel() == levelExpected){
-        return true;
-    }
-    return false;
-}
-
-int Sudoku::getNumberEmptyElement(){
-    return this->sudokuGrid->getNumberEmptyElement();
 }
 
 //This function is used to generate the Sudoku
@@ -228,7 +177,10 @@ void Sudoku::exportMPI(int * data){
             data[9*9 + i*9 + j] = (int)(this->completeGrid->getValueInGrid(i, j));
         }
     }
+    this->calculateDifficulty();
+    this->calculateLevel();
     data[2*9*9] = this->getDifficulty();
+    data[2*9*9 + 1] = this->getLevel();
 }
 
 //This function loads the data received by an MPI message into the sudoku object.
@@ -240,17 +192,72 @@ void Sudoku::importMPI(int * data){
         }
     }
     this->difficulty = data[2*9*9];
+    this->level = data[2*9*9 + 1];
 }
 
-std::string Sudoku::getStringSudoku(){
-    std::string s = "";
-    for(int i = 0; i < 9; i++){
-        for(int j = 0; j < 9; j++){
+void Sudoku::addNewValueInGrid(){
+    int row;
+    int col;
 
-            std::stringstream ss;
-            ss << this->sudokuGrid->getValueInGrid(i, j);
-            s = s + ss.str();
+    if (this->sudokuGrid->isComplete(&row, &col))
+       return;
+    do{
+        row = rand()%(9);
+        col = rand()%(9);
+    }while(this->sudokuGrid->getValueInGrid(row, col) != EMPTYVALUE);
+    this->sudokuGrid->setValueInGrid(row, col, this->completeGrid->getValueInGrid(row, col));
+    this->calculateDifficulty();
+}
+
+bool Sudoku::changeSudokuLevel(int expectedLevel){
+    this->calculateLevel();
+    if(this->getLevel() < expectedLevel){
+        return false;
+    }else{
+        while(expectedLevel < this->getLevel()){
+            this->addNewValueInGrid();
+            this->calculateLevel();
         }
     }
-    return s;
+    return true;
+}
+
+int Sudoku::getLevel(){
+    return this->level;
+}
+
+std::string Sudoku::getLevelString(){
+    return this->mapLevel[this->level];
+}
+
+void Sudoku::calculateLevel(){
+    int nbEmptyValue = this->getSudokuGrid()->getNumberEmptyElement();
+    if(nbEmptyValue < 43 ){
+        this->level = 1;
+    }
+    else if(nbEmptyValue < 49){
+        this->level = 2;
+    }
+    else if(nbEmptyValue < 53){
+        this->level = 3;
+    }
+    else if(nbEmptyValue < 56){
+        this->level = 4;
+    }
+    else if(nbEmptyValue < 58){
+        this->level = 5;
+    }
+    else{
+        this->level = 6;
+    }
+}
+
+//
+void Sudoku::FillInTheMap(){
+    this->mapLevel[1] = "Very easy";
+    this->mapLevel[2] = "Easy";
+    this->mapLevel[3] = "Medium";
+    this->mapLevel[4] = "Hard";
+    this->mapLevel[5] = "Very Hard";
+    this->mapLevel[6] = "Extreme";
 }
